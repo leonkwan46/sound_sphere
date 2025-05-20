@@ -1,0 +1,6 @@
+module Pods_SoundSphere {
+  umbrella header "Pods-SoundSphere-umbrella.h"
+
+  export *
+  module * { export * }
+}

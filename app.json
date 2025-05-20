@@ -9,11 +9,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "bundleIdentifier": "com.lkstudio.soundsphere",
       "supportsTablet": true,
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+      "bundleIdentifier": "com.lkstudio.soundsphere"
     },
     "android": {
       "adaptiveIcon": {

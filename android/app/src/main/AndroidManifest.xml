@@ -25,7 +25,6 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="soundsphere"/>
-        <data android:scheme="exp+soundsphere"/>
       </intent-filter>
     </activity>
   </application>
