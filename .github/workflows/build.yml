@@ -1,0 +1,92 @@
+name: React Native Expo CI
+
+on:
+  push:
+    branches: [main, staging, prod]
+  pull_request:
+    branches: [main, staging, prod]
+
+jobs:
+  quality-and-android-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Cache Gradle files
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            android/.gradle
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            yarn-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run lint (expo lint)
+        run: yarn lint
+
+      # Uncomment and set up tests if you add them later
+      # - name: Run tests
+      #   run: yarn test
+
+      - name: Bundle JS for Android
+        run: npx expo export --platform android --dump-sourcemap
+
+      - name: Setup JDK 17 for Gradle
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Build Android debug APK
+        run: cd android && ./gradlew assembleDebug
+
+      # --- Detox E2E Testing (commented out for now) ---
+      # - name: Install Detox CLI
+      #   run: yarn global add detox-cli
+
+      # - name: Install Android build tools for Detox
+      #   run: sudo apt-get update && sudo apt-get install -yq libglu1-mesa
+
+      # - name: Set up Android emulator
+      #   uses: reactivecircus/android-emulator-runner@v2
+      #   with:
+      #     api-level: 33
+      #     target: google_apis
+      #     arch: x86_64
+      #     profile: pixel_5
+      #     emulator-options: -no-window -no-audio
+      #     disable-animations: true
+      #     script: echo "Emulator ready"
+
+      # - name: Build Detox test app
+      #   run: yarn detox build --configuration android.emu.debug
+
+      # - name: Run Detox tests
+      #   run: yarn detox test --configuration android.emu.debug --headless
+
+      # Optional: Upload APK artifact to download later (uncomment if wanted)
+      # - name: Upload APK
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: android-debug-apk
+      #     path: android/app/build/outputs/apk/debug/app-debug.apk
