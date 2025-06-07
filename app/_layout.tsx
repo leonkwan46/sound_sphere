@@ -1,11 +1,11 @@
-import { useRouter, Stack, Redirect } from 'expo-router'
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
+import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { ThemeProvider, DarkTheme, DefaultTheme } from '@react-navigation/native'
 import 'react-native-reanimated'
 
-import { useColorScheme } from '@/hooks/useColorScheme'
 import { useAuth } from '@/hooks/useAuth'
+import { useColorScheme } from '@/hooks/useColorScheme'
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
@@ -19,15 +19,16 @@ export default function RootLayout() {
     return null
   }
 
-  // if (!user) {
-  //   return <Redirect href="/register" />
-  // }
-
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="register" options={{ title: 'Register' }} />
+      <Stack screenOptions={{ headerShown: false }}>
+        {user ? (
+          // Show app screens if authenticated
+          <Stack.Screen name="(tabs)" />
+        ) : (
+          // Show auth screens if not authenticated
+          <Stack.Screen name="(auth)" />
+        )}
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
