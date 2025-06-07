@@ -48,4 +48,4 @@ with_node \
   --target "/Users/leonkwan/Coding/SoundSphere/ios/Pods/Target Support Files/Pods-SoundSphere/ExpoModulesProvider.swift" \
   --entitlement "/Users/leonkwan/Coding/SoundSphere/ios/SoundSphere/SoundSphere.entitlements" \
   --platform "apple" \
-  --packages "expo" "expo-asset" "expo-blur" "expo-constants" "expo-file-system" "expo-font" "expo-haptics" "expo-image" "expo-keep-awake" "expo-linking" "expo-router" "expo-splash-screen" "expo-symbols" "expo-system-ui" "expo-web-browser"
+  --packages "expo" "expo-asset" "expo-blur" "expo-constants" "expo-dev-launcher" "expo-dev-menu" "expo-file-system" "expo-font" "expo-haptics" "expo-image" "expo-keep-awake" "expo-linking" "expo-router" "expo-splash-screen" "expo-symbols" "expo-system-ui" "expo-web-browser" "react-native-fbsdk-next"
