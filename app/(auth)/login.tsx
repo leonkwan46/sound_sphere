@@ -1,6 +1,6 @@
 import { auth } from '@/config/firebase'
 import { useRouter } from 'expo-router'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInAnonymously, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native'
 
@@ -24,7 +24,20 @@ export default function Login() {
       await signInWithEmailAndPassword(auth, email, password)
       // No need to redirect - auth change will trigger redirect automatically
     } catch (err) {
-      setError(err.message || 'Failed to login')
+      setError((err as Error).message || 'Failed to login')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleGuestLogin = async () => {
+    try {
+      setLoading(true)
+      setError('')
+      await signInAnonymously(auth)
+      // Auth change will trigger redirect
+    } catch (err) {
+      setError((err as Error).message || 'Failed to login as guest')
     } finally {
       setLoading(false)
     }
@@ -49,10 +62,16 @@ export default function Login() {
         value={password}
         secureTextEntry
       />
-      <Button title={loading ? "Logging in..." : "Login"} onPress={handleLogin} disabled={loading} />
+      <Button title={loading ? 'Logging in...' : 'Login'} onPress={handleLogin} disabled={loading} />
+      <View style={styles.separator} />
+      <Button 
+        title="Continue as Guest" 
+        onPress={handleGuestLogin} 
+        disabled={loading} 
+      />
       <View style={styles.registerContainer}>
-        <Text>Don't have an account? </Text>
-        <Text style={styles.link} onPress={() => router.push("/(auth)/register")}>Register</Text>
+        <Text>Don&apos;t have an account? </Text>
+        <Text style={styles.link} onPress={() => router.push('/(auth)/register' as any)}>Register</Text>
       </View>
     </View>
   )
@@ -72,6 +91,9 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     marginBottom: 10,
+  },
+  separator: {
+    height: 16,
   },
   registerContainer: {
     flexDirection: 'row',

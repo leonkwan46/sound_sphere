@@ -24,7 +24,7 @@ export default function Register() {
       await createUserWithEmailAndPassword(auth, email, password)
       // No need to redirect - auth change will trigger redirect automatically
     } catch (err) {
-      setError(err.message || 'Failed to register')
+      setError((err as Error).message || 'Failed to register')
     } finally {
       setLoading(false)
     }
@@ -52,7 +52,7 @@ export default function Register() {
       <Button title={loading ? "Signing up..." : "Sign Up"} onPress={handleRegister} disabled={loading} />
       <View style={styles.loginContainer}>
         <Text>Already have an account? </Text>
-        <Text style={styles.link} onPress={() => router.push("/(auth)/login")}>Login</Text>
+        <Text style={styles.link} onPress={() => router.push('/(auth)/login' as any)}>Login</Text>
       </View>
     </View>
   )
