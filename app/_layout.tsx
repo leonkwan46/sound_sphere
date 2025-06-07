@@ -15,6 +15,9 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   })
 
+  // Debug auth state
+  console.log('Root Layout - Auth State:', { user: user?.email || null, loading })
+
   if (!loaded || loading) {
     return null
   }
@@ -22,13 +25,8 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{ headerShown: false }}>
-        {user ? (
-          // Show app screens if authenticated
-          <Stack.Screen name="(tabs)" />
-        ) : (
-          // Show auth screens if not authenticated
-          <Stack.Screen name="(auth)" />
-        )}
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(tabs)" />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
